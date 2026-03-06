@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XSCAN — Mind Map</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a0f; overflow: hidden; font-family: 'Segoe UI', system-ui, sans-serif; }
+  
+  #mindmap { width: 100vw; height: 100vh; cursor: grab; position: relative; }
+  #mindmap:active { cursor: grabbing; }
+  
+  .node { position: absolute; border-radius: 12px; padding: 10px 16px; font-size: 13px; color: #e0e0e0; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; white-space: nowrap; user-select: none; }
+  .node:hover { transform: scale(1.08); z-index: 100; }
+  
+  .root { background: linear-gradient(135deg, #9945FF, #14F195); font-size: 24px; font-weight: 800; color: #fff; padding: 20px 36px; border-radius: 22px; box-shadow: 0 0 50px rgba(153,69,255,0.5); letter-spacing: 1px; }
+  
+  .sector { font-size: 16px; font-weight: 700; padding: 14px 22px; border-radius: 14px; box-shadow: 0 0 25px rgba(0,0,0,0.5); }
+  .sector-telegram { background: linear-gradient(135deg, #0088cc, #005f8c); }
+  .sector-discord { background: linear-gradient(135deg, #5865F2, #3a42a0); }
+  .sector-website { background: linear-gradient(135deg, #14F195, #0a8a5a); color: #000; }
+  .sector-backend { background: linear-gradient(135deg, #FF6B35, #cc4a1a); }
+  .sector-database { background: linear-gradient(135deg, #3ECF8E, #1a8a5a); color: #000; }
+  
+  .feature { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); font-size: 13px; font-weight: 600; padding: 8px 14px; }
+  .feature:hover { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.3); }
+  
+  .sub { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); font-size: 11px; padding: 5px 10px; color: #999; border-radius: 8px; }
+  
+  svg.lines { position: absolute; top: 0; left: 0; pointer-events: none; }
+  svg.lines path { fill: none; stroke-width: 1.8; opacity: 0.25; }
+  
+  .legend { position: fixed; bottom: 20px; right: 20px; background: rgba(20,20,30,0.95); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 14px 18px; color: #888; font-size: 11px; z-index: 200; }
+  .legend div { margin: 4px 0; }
+  .legend span { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+  
+  .controls { position: fixed; bottom: 20px; left: 20px; display: flex; gap: 8px; z-index: 200; }
+  .controls button { background: rgba(20,20,30,0.95); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #aaa; padding: 8px 14px; cursor: pointer; font-size: 14px; }
+  .controls button:hover { background: rgba(40,40,60,0.95); color: #fff; }
+</style>
+</head>
+<body>
+
+<div class="legend">
+  <div style="font-weight:600;color:#ccc;margin-bottom:6px;">XSCAN Ecosystem</div>
+  <div><span style="background:#0088cc"></span> Telegram Bot</div>
+  <div><span style="background:#5865F2"></span> Discord Bot</div>
+  <div><span style="background:#14F195"></span> Website</div>
+  <div><span style="background:#FF6B35"></span> Backend</div>
+  <div><span style="background:#3ECF8E"></span> Database</div>
+  <div style="margin-top:8px;color:#555;">Drag to pan • Scroll to zoom</div>
+</div>
+
+<div class="controls">
+  <button onclick="zoomIn()">＋</button>
+  <button onclick="zoomOut()">－</button>
+  <button onclick="resetView()">⟲</button>
+</div>
+
+<div id="mindmap">
+  <svg class="lines" id="lines"></svg>
+</div>
+
+<script>
+// Layout: sectors spread far from center, features spread far from sectors
+const tree = {
+  id: 'xscan', label: '🔍 XSCAN', cls: 'root',
+  children: [
+    { id: 'telegram', label: '📱 Telegram Bot', cls: 'sector sector-telegram', angle: -50, dist: 380,
+      children: [
+        { id: 'tg-alerts', label: '🔔 Alertas Real-time', cls: 'feature', angle: -100, dist: 200,
+          children: [
+            { id: 'tg-monitor', label: '📡 Monitor canais KOL', cls: 'sub', angle: -140, dist: 140 },
+            { id: 'tg-calls-ch', label: '📢 Calls → @xscancalls', cls: 'sub', angle: -115, dist: 150 },
+            { id: 'tg-achieve', label: '🏆 Achievements 2x→100x', cls: 'sub', angle: -90, dist: 140 },
+            { id: 'tg-gifs', label: '🎬 GIFs por tier', cls: 'sub', angle: -65, dist: 135 },
+            { id: 'tg-ath', label: '📈 ATH tracking pós-call', cls: 'sub', angle: -40, dist: 140 },
+          ]
+        },
+        { id: 'tg-dm', label: '💬 Comandos DM', cls: 'feature', angle: -25, dist: 210,
+          children: [
+            { id: 'tg-start', label: '/start /help', cls: 'sub', angle: -55, dist: 130 },
+            { id: 'tg-ch', label: '/channels /subscribe', cls: 'sub', angle: -35, dist: 140 },
+            { id: 'tg-subs', label: '/mysubs /settings', cls: 'sub', angle: -15, dist: 130 },
+            { id: 'tg-mcap', label: '/setminmcap /setmaxmcap', cls: 'sub', angle: 5, dist: 145 },
+            { id: 'tg-daily', label: '/dailyresume /stats', cls: 'sub', angle: 25, dist: 130 },
+            { id: 'tg-suggest', label: '/suggest /mysuggestions', cls: 'sub', angle: 45, dist: 140 },
+          ]
+        },
+        { id: 'tg-group', label: '👥 Comandos de Grupo', cls: 'feature', angle: -155, dist: 200,
+          children: [
+            { id: 'tg-autodet', label: '🔍 Auto-detect contratos', cls: 'sub', angle: -180, dist: 140 },
+            { id: 'tg-pnl', label: '/pnl /flex — PNL card', cls: 'sub', angle: -160, dist: 145 },
+            { id: 'tg-top', label: '/top — leaderboard', cls: 'sub', angle: -140, dist: 135 },
+            { id: 'tg-ga', label: '/ga — group analytics', cls: 'sub', angle: -200, dist: 140 },
+          ]
+        },
+        { id: 'tg-github', label: '📁 GitHub Tracker', cls: 'feature', angle: 15, dist: 190,
+          children: [
+            { id: 'tg-gh-cmd', label: '/github track/untrack/list', cls: 'sub', angle: 15, dist: 140 },
+          ]
+        },
+        { id: 'tg-wallet', label: '🐋 Wallet Tracker', cls: 'feature', angle: 40, dist: 195,
+          children: [
+            { id: 'tg-w-cmd', label: '/wallet track/untrack/list', cls: 'sub', angle: 30, dist: 145 },
+            { id: 'tg-w-alert', label: '🟢BUY 🔴SELL 🔄SWAP', cls: 'sub', angle: 55, dist: 140 },
+          ]
+        },
+      ]
+    },
+    { id: 'discord', label: '💬 Discord Bot', cls: 'sector sector-discord', angle: 50, dist: 380,
+      children: [
+        { id: 'dc-auto', label: '🔍 Auto-detect contratos', cls: 'feature', angle: 10, dist: 185 },
+        { id: 'dc-scan', label: '/scan — análise completa', cls: 'feature', angle: 30, dist: 190 },
+        { id: 'dc-pnl', label: '/pnl — PNL card', cls: 'feature', angle: 50, dist: 185 },
+        { id: 'dc-top', label: '/top — leaderboard', cls: 'feature', angle: 70, dist: 180 },
+        { id: 'dc-ga', label: '/ga — group analytics', cls: 'feature', angle: 90, dist: 185 },
+        { id: 'dc-github', label: '/github track/untrack/list', cls: 'feature', angle: 110, dist: 190 },
+        { id: 'dc-wallet', label: '/wallet track/untrack/list', cls: 'feature', angle: 130, dist: 185 },
+        { id: 'dc-help', label: '/help /ping', cls: 'feature', angle: -10, dist: 175 },
+      ]
+    },
+    { id: 'website', label: '🌐 Website', cls: 'sector sector-website', angle: 170, dist: 400,
+      children: [
+        { id: 'web-pub', label: '📊 Páginas Públicas', cls: 'feature', angle: 135, dist: 210,
+          children: [
+            { id: 'web-home', label: '/ — Dashboard', cls: 'sub', angle: 105, dist: 135 },
+            { id: 'web-kol', label: '/kol/[handle]', cls: 'sub', angle: 120, dist: 140 },
+            { id: 'web-token', label: '/token/[address]', cls: 'sub', angle: 135, dist: 135 },
+            { id: 'web-lb', label: '/leaderboard', cls: 'sub', angle: 150, dist: 140 },
+            { id: 'web-tg', label: '/telegram', cls: 'sub', angle: 90, dist: 135 },
+            { id: 'web-search', label: '/search', cls: 'sub', angle: 165, dist: 130 },
+          ]
+        },
+        { id: 'web-admin', label: '🔐 Admin Panel', cls: 'feature', angle: 190, dist: 215,
+          children: [
+            { id: 'adm-dash', label: 'Dashboard', cls: 'sub', angle: 170, dist: 130 },
+            { id: 'adm-kols', label: 'KOLs (CRUD)', cls: 'sub', angle: 185, dist: 135 },
+            { id: 'adm-calls', label: 'Calls + TG Calls', cls: 'sub', angle: 200, dist: 130 },
+            { id: 'adm-ch', label: 'Canais TG', cls: 'sub', angle: 215, dist: 135 },
+            { id: 'adm-ach', label: 'Achievements', cls: 'sub', angle: 230, dist: 130 },
+            { id: 'adm-auto', label: 'Automation', cls: 'sub', angle: 155, dist: 130 },
+            { id: 'adm-subs', label: 'Subscribers', cls: 'sub', angle: 245, dist: 135 },
+          ]
+        },
+        { id: 'web-docs', label: '📚 Docs', cls: 'feature', angle: 225, dist: 195,
+          children: [
+            { id: 'doc-how', label: 'How it Works', cls: 'sub', angle: 215, dist: 125 },
+            { id: 'doc-score', label: 'Scoring', cls: 'sub', angle: 230, dist: 130 },
+            { id: 'doc-bots', label: 'Bots Guide', cls: 'sub', angle: 245, dist: 125 },
+            { id: 'doc-tok', label: 'Tokenomics', cls: 'sub', angle: 260, dist: 130 },
+          ]
+        },
+      ]
+    },
+    { id: 'backend', label: '⚙️ Backend Services', cls: 'sector sector-backend', angle: -140, dist: 390,
+      children: [
+        { id: 'be-tracker', label: '📈 Call Tracker', cls: 'feature', angle: -115, dist: 200,
+          children: [
+            { id: 'be-batch', label: 'Batch prices (DexScreener)', cls: 'sub', angle: -135, dist: 140 },
+            { id: 'be-ath2', label: 'ATH tracking pós-call', cls: 'sub', angle: -115, dist: 145 },
+            { id: 'be-defer', label: 'Deferred achievements 15min', cls: 'sub', angle: -95, dist: 145 },
+            { id: 'be-miles', label: 'Milestones 2x→100x', cls: 'sub', angle: -155, dist: 140 },
+          ]
+        },
+        { id: 'be-mon', label: '📡 Channel Monitor', cls: 'feature', angle: -160, dist: 200,
+          children: [
+            { id: 'be-poll', label: 'Poll canais TG', cls: 'sub', angle: -180, dist: 135 },
+            { id: 'be-det', label: 'Auto-detect contratos', cls: 'sub', angle: -165, dist: 140 },
+            { id: 'be-rt', label: 'Supabase Realtime', cls: 'sub', angle: -195, dist: 135 },
+          ]
+        },
+        { id: 'be-gh', label: '📁 GitHub Service', cls: 'feature', angle: -80, dist: 195,
+          children: [
+            { id: 'be-gh-p', label: 'Poll repos 60s', cls: 'sub', angle: -85, dist: 130 },
+            { id: 'be-gh-d', label: 'Commits, releases, stars', cls: 'sub', angle: -65, dist: 135 },
+          ]
+        },
+        { id: 'be-wal', label: '🐋 Wallet (Helius)', cls: 'feature', angle: -195, dist: 195,
+          children: [
+            { id: 'be-cf', label: 'Cloudflare tunnel HTTPS', cls: 'sub', angle: -210, dist: 140 },
+            { id: 'be-wh', label: 'Real-time webhooks', cls: 'sub', angle: -190, dist: 135 },
+          ]
+        },
+        { id: 'be-pnl', label: '🎨 PNL Card (node-canvas)', cls: 'feature', angle: -60, dist: 185 },
+      ]
+    },
+    { id: 'database', label: '🗄️ Database (Supabase)', cls: 'sector sector-database', angle: -170, dist: 160,
+      children: [
+        { id: 'db-kols', label: 'kols', cls: 'feature', angle: -240, dist: 145 },
+        { id: 'db-calls', label: 'calls (Twitter)', cls: 'feature', angle: -220, dist: 150 },
+        { id: 'db-tgc', label: 'telegram_calls', cls: 'feature', angle: -200, dist: 145 },
+        { id: 'db-chan', label: 'telegram_channels', cls: 'feature', angle: -260, dist: 150 },
+        { id: 'db-grp', label: 'group_calls', cls: 'feature', angle: -180, dist: 140 },
+        { id: 'db-usr', label: 'alert_users', cls: 'feature', angle: -280, dist: 145 },
+        { id: 'db-ach', label: 'achievements', cls: 'feature', angle: -160, dist: 145 },
+        { id: 'db-sug', label: 'channel_suggestions', cls: 'feature', angle: -300, dist: 150 },
+      ]
+    },
+  ]
+};
+
+const container = document.getElementById('mindmap');
+const svg = document.getElementById('lines');
+let scale = 1, panX = 0, panY = 0, dragging = false, dragStartX, dragStartY;
+const CX = 2500, CY = 2000; // Large canvas
+const allNodes = [];
+
+// Set SVG size
+svg.style.width = '5000px';
+svg.style.height = '4000px';
+
+function getColor(id) {
+  if (id.startsWith('tg') || id === 'telegram') return '#0088cc';
+  if (id.startsWith('dc') || id === 'discord') return '#5865F2';
+  if (id.startsWith('web') || id.startsWith('adm') || id.startsWith('doc') || id === 'website') return '#14F195';
+  if (id.startsWith('be') || id === 'backend') return '#FF6B35';
+  if (id.startsWith('db') || id === 'database') return '#3ECF8E';
+  return '#666';
+}
+
+function build(node, px, py, parentColor) {
+  const rad = (node.angle || 0) * Math.PI / 180;
+  const x = px + Math.cos(rad) * (node.dist || 0);
+  const y = py + Math.sin(rad) * (node.dist || 0);
+  const color = parentColor || getColor(node.id);
+
+  const el = document.createElement('div');
+  el.className = `node ${node.cls}`;
+  el.textContent = node.label;
+  container.appendChild(el);
+  
+  allNodes.push({ el, x, y });
+  
+  requestAnimationFrame(() => {
+    el.style.left = (x - el.offsetWidth / 2) + 'px';
+    el.style.top = (y - el.offsetHeight / 2) + 'px';
+  });
+
+  if (node.id !== 'xscan') {
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    const mx = (px + x) / 2;
+    const d = `M ${px} ${py} Q ${mx} ${py}, ${x} ${y}`;
+    path.setAttribute('d', d);
+    path.setAttribute('stroke', color);
+    svg.appendChild(path);
+  }
+
+  if (node.children) {
+    node.children.forEach(c => build(c, x, y, getColor(c.id) || color));
+  }
+}
+
+function applyTransform() {
+  const ox = window.innerWidth / 2 - CX * scale + panX;
+  const oy = window.innerHeight / 2 - CY * scale + panY;
+  container.style.transform = `translate(${ox}px, ${oy}px) scale(${scale})`;
+  container.style.transformOrigin = '0 0';
+}
+
+function zoomIn() { scale = Math.min(scale * 1.25, 3); applyTransform(); }
+function zoomOut() { scale = Math.max(scale * 0.8, 0.2); applyTransform(); }
+function resetView() { scale = 0.55; panX = 0; panY = 0; applyTransform(); }
+
+container.addEventListener('mousedown', e => { dragging = true; dragStartX = e.clientX - panX; dragStartY = e.clientY - panY; });
+window.addEventListener('mousemove', e => { if (!dragging) return; panX = e.clientX - dragStartX; panY = e.clientY - dragStartY; applyTransform(); });
+window.addEventListener('mouseup', () => dragging = false);
+window.addEventListener('wheel', e => { e.preventDefault(); if (e.deltaY < 0) zoomIn(); else zoomOut(); }, { passive: false });
+
+// Touch support
+let lastTouchDist = 0;
+container.addEventListener('touchstart', e => {
+  if (e.touches.length === 1) { dragging = true; dragStartX = e.touches[0].clientX - panX; dragStartY = e.touches[0].clientY - panY; }
+  if (e.touches.length === 2) { lastTouchDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY); }
+});
+container.addEventListener('touchmove', e => {
+  if (e.touches.length === 1 && dragging) { panX = e.touches[0].clientX - dragStartX; panY = e.touches[0].clientY - dragStartY; applyTransform(); }
+  if (e.touches.length === 2) {
+    const d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+    if (lastTouchDist) { scale *= d / lastTouchDist; scale = Math.max(0.2, Math.min(3, scale)); applyTransform(); }
+    lastTouchDist = d;
+  }
+});
+container.addEventListener('touchend', () => { dragging = false; lastTouchDist = 0; });
+
+build(tree, CX, CY, null);
+resetView();
+</script>
+</body>
+</html>

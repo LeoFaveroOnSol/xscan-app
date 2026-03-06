@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(tree:*)",
+      "Bash(find:*)",
+      "Bash(npm run build:*)",
+      "Bash(/opt/homebrew/bin/npm run build)",
+      "Bash(export PATH=\"/opt/homebrew/bin:$PATH\")",
+      "Bash(npx tsc:*)",
+      "Bash(/opt/homebrew/bin/npx tsc --noEmit)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(PATH=\"/opt/homebrew/bin:$PATH\" node:*)",
+      "Bash(export PATH=\"/opt/homebrew/bin:/usr/bin:$PATH\")",
+      "Bash(/opt/homebrew/bin/node /opt/homebrew/bin/npm run build)",
+      "Bash(pnpm run build:*)"
+    ]
+  }
+}

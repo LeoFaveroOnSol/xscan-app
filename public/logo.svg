@@ -1,0 +1,18 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4ADE80"/>
+      <stop offset="100%" stop-color="#22C55E"/>
+    </linearGradient>
+  </defs>
+  <!-- X - Top left blob -->
+  <ellipse cx="75" cy="100" rx="50" ry="55" fill="url(#logoGrad)"/>
+  <!-- X - Diagonal bar -->
+  <rect x="30" y="225" width="200" height="62" rx="31" transform="rotate(-45 130 256)" fill="url(#logoGrad)"/>
+  <!-- X - Bottom left blob -->
+  <ellipse cx="75" cy="410" rx="50" ry="55" fill="url(#logoGrad)"/>
+  <!-- S - Top part with corner -->
+  <path d="M290 55 H440 C465 55 480 75 480 100 V130 C480 155 465 170 440 170 H350 C325 170 310 185 310 210 V240" stroke="url(#logoGrad)" stroke-width="60" stroke-linecap="round" fill="none"/>
+  <!-- S - Bottom part -->
+  <path d="M310 260 V320 C310 345 325 360 350 360 H440 C465 360 480 380 480 405 V440 C480 465 460 480 435 480 H290" stroke="url(#logoGrad)" stroke-width="60" stroke-linecap="round" fill="none"/>
+</svg>

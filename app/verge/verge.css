@@ -1,0 +1,208 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+.verge-root {
+  background: #1A2B1A;
+  color: white;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  min-height: 100vh;
+  position: relative;
+}
+
+.verge-root::before {
+  content: '';
+  position: fixed;
+  top: -20%;
+  left: 30%;
+  width: 60%;
+  height: 60%;
+  background: radial-gradient(ellipse at center, rgba(30, 60, 30, 0.4) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.verge-root .light-rays {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 60%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+.verge-root .light-rays::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 200%;
+  height: 200%;
+  background: repeating-linear-gradient(
+    55deg,
+    transparent,
+    transparent 18px,
+    rgba(74, 222, 128, 0.08) 18px,
+    rgba(74, 222, 128, 0.08) 21px
+  );
+}
+
+.verge-root .verge-card {
+  background: #F5F5F0;
+  border-radius: 12px;
+  padding: 24px 28px;
+  box-shadow: 4px 6px 0px rgba(0,0,0,0.25);
+  border: 1px solid rgba(0,0,0,0.08);
+  transition: transform 0.3s ease;
+}
+.verge-root .verge-card:hover {
+  transform: rotate(0deg) scale(1.02) !important;
+}
+
+.verge-root .card-tilt-left { transform: rotate(-2deg); }
+.verge-root .card-tilt-right { transform: rotate(1.5deg); }
+
+.verge-root .animate-on-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.verge-root .animate-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.verge-root .animate-on-scroll.visible.card-tilt-left { transform: rotate(-2deg); }
+.verge-root .animate-on-scroll.visible.card-tilt-right { transform: rotate(1.5deg); }
+
+.verge-root .badge-green {
+  display: inline-block;
+  padding: 8px 24px;
+  border-radius: 8px;
+  background: #4ADE80;
+  color: #1A2B1A;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+}
+.verge-root .badge-orange {
+  display: inline-block;
+  padding: 10px 32px;
+  border-radius: 8px;
+  background: #C17F1A;
+  color: white;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+}
+
+.verge-root .hero-highlight {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 800;
+  font-size: 50px;
+  line-height: 1.3;
+  color: white;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+.verge-root .hero-highlight span {
+  background: #4ADE80;
+  color: #1A2B1A;
+  padding: 4px 16px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+.verge-root .cta-banner {
+  background: linear-gradient(90deg, #22c55e, #4ade80);
+  color: #1A2B1A;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  padding: 16px 32px;
+  border-radius: 12px;
+  text-align: center;
+  width: 100%;
+}
+
+.verge-root .illustration-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: 3px solid #2a3a2a;
+  background: rgba(20, 35, 20, 0.6);
+  color: rgba(74, 222, 128, 0.5);
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  min-height: 300px;
+  position: relative;
+  overflow: hidden;
+}
+.verge-root .illustration-placeholder::before,
+.verge-root .illustration-placeholder::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 20px;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 8px,
+    rgba(74,222,128,0.15) 8px,
+    rgba(74,222,128,0.15) 16px,
+    transparent 16px,
+    transparent 24px
+  );
+}
+.verge-root .illustration-placeholder::before { left: 4px; }
+.verge-root .illustration-placeholder::after { right: 4px; }
+
+.verge-root .tax-badge {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  background: #4ADE80;
+  color: #1A2B1A;
+  padding: 16px 32px;
+  border-radius: 8px;
+  font-family: 'Space Grotesk', sans-serif;
+}
+.verge-root .tax-badge .tax-number {
+  font-size: 36px;
+  font-weight: 800;
+  line-height: 1;
+}
+.verge-root .tax-badge .tax-sub {
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.verge-root .choice-card-bull {
+  background: rgba(74,222,128,0.1);
+  border: 2px solid rgba(74,222,128,0.3);
+  border-radius: 16px;
+  padding: 40px;
+  text-align: center;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+.verge-root .choice-card-bull:hover { transform: scale(1.04); }
+
+.verge-root .choice-card-bear {
+  background: rgba(239,68,68,0.1);
+  border: 2px solid rgba(239,68,68,0.3);
+  border-radius: 16px;
+  padding: 40px;
+  text-align: center;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+.verge-root .choice-card-bear:hover { transform: scale(1.04); }
+
+@media (max-width: 640px) {
+  .verge-root .hero-highlight { font-size: 36px; }
+}

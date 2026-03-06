@@ -1,0 +1,12 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/scan-kols",
+      "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/api/cron/update-images",
+      "schedule": "0 6 * * *"
+    }
+  ]
+}
